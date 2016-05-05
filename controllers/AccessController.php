@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ClndrUser;
-use app\models\search\ClndrUserSearch;
+use app\models\Access;
+use app\models\search\AccessSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ClndrUserController implements the CRUD actions for ClndrUser model.
+ * AccessController implements the CRUD actions for Access model.
  */
-class ClndrUserController extends Controller
+class AccessController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Lists all ClndrUser models.
+     * Lists all Access models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ClndrUserSearch();
+        $searchModel = new AccessSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Displays a single ClndrUser model.
+     * Displays a single Access model.
      * @param integer $id
      * @return mixed
      */
@@ -54,13 +54,13 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Creates a new ClndrUser model.
+     * Creates a new Access model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ClndrUser();
+        $model = new Access();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +72,7 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Updates an existing ClndrUser model.
+     * Updates an existing Access model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,7 +91,7 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Deletes an existing ClndrUser model.
+     * Deletes an existing Access model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -104,15 +104,15 @@ class ClndrUserController extends Controller
     }
 
     /**
-     * Finds the ClndrUser model based on its primary key value.
+     * Finds the Access model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ClndrUser the loaded model
+     * @return Access the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ClndrUser::findOne($id)) !== null) {
+        if (($model = Access::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
