@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\User;
+use app\models\Calendar;
 
 /**
- * UserSeach represents the model behind the search form about `app\models\User`.
+ * CalendarSearch represents the model behind the search form about `app\models\Calendar`.
  */
-class UserSeach extends User
+class CalendarSearch extends Calendar
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class UserSeach extends User
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['username', 'name', 'surname', 'password', 'salt', 'access_token', 'create_date'], 'safe'],
+            [['id', 'creator'], 'integer'],
+            [['text', 'date_event'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class UserSeach extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = Calendar::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,15 +57,11 @@ class UserSeach extends User
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'create_date' => $this->create_date,
+            'creator' => $this->creator,
+            'date_event' => $this->date_event,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'surname', $this->surname])
-            ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'salt', $this->salt])
-            ->andFilterWhere(['like', 'access_token', $this->access_token]);
+        $query->andFilterWhere(['like', 'text', $this->text]);
 
         return $dataProvider;
     }
