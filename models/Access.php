@@ -29,7 +29,7 @@ class Access extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_owner', 'user_guest', 'date'], 'required'],
+            [['user_owner', 'user_guest'], 'required'],
             [['user_owner', 'user_guest'], 'integer'],
             [['date'], 'safe']
         ];

@@ -29,7 +29,7 @@ class Calendar extends ActiveRecord
     public function rules()
     {
         return [
-            [['text', 'creator', 'date_event'], 'required'],
+            [['text', 'creator'], 'required'],
             [['text'], 'string'],
             [['creator'], 'integer'],
             [['date_event'], 'safe']
