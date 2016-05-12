@@ -14,8 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'creator')->textInput() ?>
-
     <?= $form->field($model, 'date_event')->textInput() ?>
 
     <div class="form-group">
