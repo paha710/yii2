@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Calendar;
 use app\models\search\CalendarSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,15 +15,40 @@ use yii\filters\VerbFilter;
  */
 class CalendarController extends Controller
 {
+
+    // Метод определящий фильтры управления доступом . Возвращает массив фильтров.
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
+            //Разрешает определенные действия только авторизованным пользователям
+           'access'=>[
+               // Определяем имя класса
+
+               'class' => AccessControl::className(),
+               // Определяем разрешенные действия
+
+                'only' => [ 'mycalendar','update', 'delete'],
+
+               // Разрешаем действия только зарегестрированным пользователям
+
+                'rules' => [
+                    [
+                    'allow' => true,
+                    'actions' => ['mycalendar','update','delete'],
+                    'roles' => ['@']
+                    ],
                 ],
-            ],
+               ],
+               // Фильтр проверяет, разрешено ли запросам HTTP выполнять затребованные ими действия.
+               'verbs'=>[
+                   'class'=> VerbFilter::className(),
+                   'actions' => [
+                       'delete' =>['post']
+                   ],
+               ],
         ];
     }
 
@@ -30,12 +56,36 @@ class CalendarController extends Controller
      * Lists all Calendar models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionMycalendar()
     {
         $searchModel = new CalendarSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(
+            [
+                'CalendarSearch' => [
+                    'creator' => Yii::$app->user->id
+                ]
+            ]
+        );
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    
+    public function actionFriendscalendar($id){
+        $searchModel = new CalendarSearch();
+        $dataProvider = $searchModel->search([
+            
+            'CalendarSearch' => [
+                'creator' => $id,
+                'access' => [
+                    'user_guest' => Yii::$app->user->id
+                ]
+            ]
+        ]);
+        return $this->render('Friendscalendar', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -58,6 +108,7 @@ class CalendarController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+
     public function actionCreate()
     {
         $model = new Calendar();
@@ -100,7 +151,7 @@ class CalendarController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['calendar/mycalendar']);
     }
 
     /**
