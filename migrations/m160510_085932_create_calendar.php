@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m160505_065226_create_calendar extends Migration
+class m160510_085932_create_calendar extends Migration
 {
     public function safeUp()
     {
@@ -10,7 +10,7 @@ class m160505_065226_create_calendar extends Migration
             'id'=>$this->primaryKey()->notNull(),
             'text'=>$this->text()->notNull(),
             'creator'=>$this->integer()->notNull(),
-            'date_event'=>$this->dateTime()->notNull()
+            'date_event'=>$this->timestamp()->notNull()
         ]);
     }
 
@@ -19,4 +19,3 @@ class m160505_065226_create_calendar extends Migration
         $this->dropTable('calendar');
     }
 }
-

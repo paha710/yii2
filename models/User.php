@@ -25,7 +25,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return 'clndr_user';
+        return 'user';
     }
 
     /**
@@ -37,11 +37,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'name', 'surname', 'password', 'salt', 'create_date'], 'required'],
+            [['username', 'name', 'surname', 'password'], 'required'],
             [['create_date'], 'safe'],
             [['username'], 'string', 'max' => self::MAX_LENGTH_USERNAME],
             [['name', 'surname'], 'string', 'max' => self::MAX_LENGTH_SURNAME],
-            [['password', 'salt', 'access_token'], 'string', 'min' => self::MIN_LENGTH_PASS],
+            [['password'], 'string', 'min' => self::MIN_LENGTH_PASS],
             [['username'], 'unique'],
             [['access_token'], 'unique']
         ];
