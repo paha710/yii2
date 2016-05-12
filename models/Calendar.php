@@ -3,8 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-
 /**
  * This is the model class for table "calendar".
  *
@@ -13,7 +11,7 @@ use yii\db\ActiveRecord;
  * @property integer $creator
  * @property string $date_event
  */
-class Calendar extends ActiveRecord
+class Calendar extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -29,7 +27,7 @@ class Calendar extends ActiveRecord
     public function rules()
     {
         return [
-            [['text', 'creator', 'date_event'], 'required'],
+            [['text'], 'required'],
             [['text'], 'string'],
             [['creator'], 'integer'],
             [['date_event'], 'safe']
@@ -49,6 +47,22 @@ class Calendar extends ActiveRecord
         ];
     }
 
+
+    public function getUser(){
+        return $this->hasOne(User::className(),['creator' => 'id']);
+    }
+
+    public function beforeSave ($insert)
+    {
+        if ($this->getIsNewRecord())
+        {
+            $this->creator = Yii::$app->user->id;
+        }
+        
+        parent::beforeSave($insert);
+
+        return true;
+    }
     /**
      * @inheritdoc
      * @return \app\models\query\CalendarQuery the active query used by this AR class.
